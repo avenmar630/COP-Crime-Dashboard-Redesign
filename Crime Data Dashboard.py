@@ -1,11 +1,11 @@
 #!/usr/bin/env python
+#!/usr/bin/env python
 # coding: utf-8
 
 # In[30]:
 
 
 import requests
-iimport requests
 import orjson
 import plotly.express as px
 from dash import Dash, html, dcc
@@ -88,38 +88,88 @@ cat_crimedf
 # In[27]:
 
 
-cat_crimedf = cat_crimedf.groupby(['year','Category']).size().reset_index(name='count')
+cat_crimedf = crimedf.groupby(['year','Category']).size().reset_index(name='count')
 cat_crimedf
 
 
-# In[28]:
+# In[57]:
 
 
-category_fig = px.bar(tr, x="year", y="count", color="Category",
-            hover_data=['Category'], barmode = 'stack')
+category_fig = px.bar(cat_crimedf, x="year", y="count", color="Category",
+            hover_data=['Category'], barmode = 'stack',
+            labels={
+                     "year": "Year",
+                     "count": "Count",
+                 },
+            title="Crimes By Category Over Time")
 
 
-# In[34]:
+# In[36]:
+
+
+type_crimedf = crimedf.groupby(['year','text_general_code']).size().reset_index(name='count')
+type_crimedf
+#line_fig = px.line(type_crimedf, x="year", y="count", color='text_general_code')
+
+
+# In[59]:
+
+
+line_fig = px.line(type_crimedf, x="year", y="count", color='text_general_code',
+                   labels={
+                     "year": "Year",
+                     "count": "Count",
+                     "text_general_code": 'General Codes'
+                  },
+                  title="Crimes By General Type Overtime")
+line_fig.show()
+
+
+# In[47]:
+
+
+total_stats = crimedf.groupby(['year']).size().reset_index(name = 'count')
+total_stats
+
+
+# In[60]:
+
+
+totals_fig = px.bar(total_stats, x="year", y="count",
+            hover_data=['count'],
+            title="Total Crimes Per Year",
+                    labels={
+                     "year": "Year",
+                     "count": "Count",
+                     },)
+totals_fig.show()
+
+
+# In[75]:
 
 
 app = Dash(__name__)
 
-# assume you have a "long-form" data frame
-# see https://plotly.com/python/px-arguments/ for more options
-
-category_fig = category_fig
-
 app.layout = html.Div(children=[
-    html.H1(children='Stacked Bar Graph'),
+    html.H1(children='Crime Stats By Type'),
 
     html.Div(children='''
-        Breakdown of crime types overtime, categorized as Felonies or Misdemeanors.
+        Breakdown of crime types overtime, categorized as Felonies or Misdemeanors, general codes and total per year.
     '''),
-
     dcc.Graph(
         id='category-graph',
-        figure=category_fig
-    )
+        figure=category_fig,
+        style={'display': 'inline-block','width': 'auto'}
+    ),
+    dcc.Graph(
+        id = 'type-graph',
+        figure = line_fig,
+        style={'display': 'inline-block', 'width': 'auto'}
+    ),
+    dcc.Graph(
+        id = 'total-graph',
+        figure = totals_fig,
+    ),
 ])
 
 if __name__ == '__main__':
