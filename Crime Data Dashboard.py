@@ -5,8 +5,7 @@
 
 
 import requests
-import dask.dataframe as dd
-import pandas as pd
+iimport requests
 import orjson
 import plotly.express as px
 from dash import Dash, html, dcc
@@ -16,12 +15,14 @@ import pandas as pd
 # In[2]:
 
 
+#GeoJSON link
 crimedatalink = 'https://phl.carto.com/api/v2/sql?q=SELECT+*+FROM+incidents_part1_part2&filename=incidents_part1_part2&format=geojson&skipfields=cartodb_id'
 
 
 # In[3]:
 
 
+#establish response, normalize data into decodable json format
 response = requests.get(crimedatalink)
 data = orjson.loads(response.content)
 
@@ -29,12 +30,14 @@ data = orjson.loads(response.content)
 # In[4]:
 
 
+#convert to pandas dataframe
 crimedf = pd.json_normalize([i['properties'] for i in data['features']])
 
 
 # In[16]:
 
 
+#mapping of offenses commited in Philadlephia
 offense_categories = {
     "Aggravated Assault Firearm": "Felony",
     "Aggravated Assault No Firearm": "Felony",
@@ -74,27 +77,26 @@ offense_categories = {
 # In[18]:
 
 
-testdf = crimedf
-testdf['dispatch_date'] = pd.to_datetime(testdf['dispatch_date'])
-testdf['year'] = testdf['dispatch_date'].dt.year
-testdf['Category'] = testdf['text_general_code'].map(offense_categories)
-testdf
+#data manipulation for addition of broad categorization - Felony vs Misdemeanor
+cat_crimedf = crimedf
+cat_crimedf['dispatch_date'] = pd.to_datetime(cat_crimedf['dispatch_date'])
+cat_crimedf['year'] = cat_crimedf['dispatch_date'].dt.year
+cat_crimedf['Category'] = cat_crimedf['text_general_code'].map(offense_categories)
+cat_crimedf
 
 
 # In[27]:
 
 
-tr = testdf.groupby(['year','Category']).size().reset_index(name='count')
-tr
+cat_crimedf = cat_crimedf.groupby(['year','Category']).size().reset_index(name='count')
+cat_crimedf
 
 
 # In[28]:
 
 
-fig = px.bar(tr, x="year", y="count", color="Category",
+category_fig = px.bar(tr, x="year", y="count", color="Category",
             hover_data=['Category'], barmode = 'stack')
-fig.update_traces()
-fig.show()
 
 
 # In[34]:
@@ -105,7 +107,7 @@ app = Dash(__name__)
 # assume you have a "long-form" data frame
 # see https://plotly.com/python/px-arguments/ for more options
 
-fig = fig
+category_fig = category_fig
 
 app.layout = html.Div(children=[
     html.H1(children='Stacked Bar Graph'),
@@ -115,8 +117,8 @@ app.layout = html.Div(children=[
     '''),
 
     dcc.Graph(
-        id='example-graph',
-        figure=fig
+        id='category-graph',
+        figure=category_fig
     )
 ])
 
