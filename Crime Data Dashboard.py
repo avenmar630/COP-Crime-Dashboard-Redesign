@@ -16,14 +16,18 @@ import pandas as pd
 
 
 #GeoJSON link
-crimedatalink = 'https://phl.carto.com/api/v2/sql?q=SELECT+*+FROM+incidents_part1_part2&filename=incidents_part1_part2&format=geojson&skipfields=cartodb_id'
+current_year = datetime.now()
+five_year = current_year - timedelta(days=5*365)
+date_string = five_year.strftime("%Y-%m-%d")
 
+print(date_string)
 
+crimedatalink = f'https://phl.carto.com/api/v2/sql?q=SELECT+*+FROM+incidents_part1_part2 WHERE dispatch_date >= \'{date_string}\' &filename=incidents_part1_part2&format=geojson&skipfields=cartodb_id'
 # In[3]:
 
 
 #establish response, normalize data into decodable json format
-response = requests.get(crimedatalink)
+response = requests.get(crimedatalink, verify = True)
 data = orjson.loads(response.content)
 
 
