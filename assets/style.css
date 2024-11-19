@@ -1,0 +1,78 @@
+/* General body styling */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+body {
+    font-family: 'Montserrat', sans-serif !important;  /* Set the default font */
+    background-color: white;         /* Light gray background */
+    color:black;                       /* Dark gray text color */
+    margin: 0;
+    padding: 0;
+}
+
+/* Styling for headers */
+h1, h2, h3 {
+    font-family: 'Montserrat', serif !important;;      /* Use a serif font for headers */
+    color: #2c3e50;                  /* Dark blue color for headers */
+    text-align: center;              /* Center-align the headers */
+    margin-bottom: 20px;             /* Add spacing below headers */
+}
+
+/* Paragraph styling */
+p {
+    font-family: 'Montserrat', sans-serif;  /* Use a sans-serif font for paragraphs */
+    color: black;                    /* Medium gray color for text */
+    font-size: 16px;                   /* Set the font size */
+    line-height: 1.6;                  /* Set line spacing for readability */
+    text-align: center;                /* Center-align the paragraph text */
+    padding: 0 20px;                   /* Add some padding on the sides */
+}
+
+/* Styling for buttons */
+.btn {
+    background-color: #3498db;         /* Set background color to blue */
+    color: white;                      /* White text color */
+    font-family: 'Roboto', sans-serif;
+    padding: 10px 20px;                /* Add padding around text */
+    border-radius: 5px;                /* Round the corners of the button */
+    border: none;                      /* Remove border */
+    cursor: pointer;                  /* Change cursor to pointer on hover */
+}
+
+.btn:hover {
+    background-color: #2980b9;         /* Darken the button color on hover */
+}
+
+/* Customize the graphs */
+.dbc-graph {
+    border-radius: 10px;               /* Round the corners of the graph */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* Add subtle shadow around graphs */
+    margin-top: 20px;                   /* Add margin on top of the graphs */
+}
+
+/* Styling for columns and rows */
+.row {
+    margin: 10px 0;
+}
+
+.col {
+    padding: 10px;
+}
+
+/* Add responsive media query for smaller screens */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+
+    .btn {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}
