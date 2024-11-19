@@ -26,21 +26,6 @@ p {
     padding: 0 20px;                   /* Add some padding on the sides */
 }
 
-/* Styling for buttons */
-.btn {
-    background-color: #3498db;         /* Set background color to blue */
-    color: white;                      /* White text color */
-    font-family: 'Roboto', sans-serif;
-    padding: 10px 20px;                /* Add padding around text */
-    border-radius: 5px;                /* Round the corners of the button */
-    border: none;                      /* Remove border */
-    cursor: pointer;                  /* Change cursor to pointer on hover */
-}
-
-.btn:hover {
-    background-color: #2980b9;         /* Darken the button color on hover */
-}
-
 /* Customize the graphs */
 .dbc-graph {
     border-radius: 10px;               /* Round the corners of the graph */
